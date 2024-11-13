@@ -74,6 +74,50 @@ print(wrong)
 
 # 3) produce a csv file of the name of the game and the predicted rating
 
+Title = test_data_df['title']
+
+df = pd.DataFrame()
+df['title'] = pd.Series(Title)
+df['prediction'] = pd.Series(predicted)
+print(df[:10])
+
+# df[df['prediction'] == 1]['prediction'] = 'Everyone'
+# df[df['prediction'] == 2]['prediction'] = 'Everyone 10+'
+# df[df['prediction'] == 3]['prediction'] = 'Mature'
+# df[df['prediction'] == 4]['prediction'] = 'Teen'
+# print(df[:10])
+
+df1 = df[df['prediction'] == 1]
+df2 = df[df['prediction'] == 2]
+df3 = df[df['prediction'] == 3]
+df4 = df[df['prediction'] == 4]
+
+df1['prediction'] = 'Everyone'
+df2['prediction'] = 'Everyone 10+'
+df3['prediction'] = 'Mature'
+df4['prediction'] = 'Teen'
+
+print(df1[:5])
+print(df2[:5])
+print(df3[:5])
+print(df4[:5])
 
 
-#new
+
+outfile = open('mypredictions.csv','w')
+
+final_df = pd.concat([df1, df2, df3,df4], ignore_index=False)
+sorted_final_df = final_df.sort_index()
+
+list1 = pd.Series(sorted_final_df['title'])
+list2 = pd.Series(sorted_final_df['prediction'])
+
+outfile.write('title,prediction\n')
+
+for item in zip(list1,list2):
+    l1,l2 = item
+    outfile.write(item[0]+','+item[1]+'\n')
+
+outfile.close()
+
+
